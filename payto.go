@@ -46,6 +46,7 @@ import "net/url"
 
 const (
 	InternationalBankAccountNumber = "iban"
+	BusinessIdentifierCode         = "bic"
 	AutomatedClearingHouse         = "ach"
 	UnifiedPaymentInterface        = "upi"
 	Bitcoin                        = "bitcoin"

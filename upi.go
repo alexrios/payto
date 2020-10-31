@@ -33,19 +33,19 @@ type UPI struct {
 
 type UPIOptional func(*UPI)
 
-func Sender(sender string) UPIOptional {
+func UPISender(sender string) UPIOptional {
 	return func(upi *UPI) {
 		upi.sender = sender
 	}
 }
 
-func Message(message string) UPIOptional {
+func UPIMessage(message string) UPIOptional {
 	return func(upi *UPI) {
 		upi.message = message
 	}
 }
 
-func Instruction(instruction string) UPIOptional {
+func UPIInstruction(instruction string) UPIOptional {
 	return func(upi *UPI) {
 		upi.instruction = instruction
 	}
