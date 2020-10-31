@@ -39,6 +39,18 @@ func Sender(sender string) UPIOptional {
 	}
 }
 
+func Message(message string) UPIOptional {
+	return func(upi *UPI) {
+		upi.message = message
+	}
+}
+
+func Instruction(instruction string) UPIOptional {
+	return func(upi *UPI) {
+		upi.instruction = instruction
+	}
+}
+
 func NewUPI(accountAlias, receiver string, amount string, options ...UPIOptional) (UPI, error) {
 	floatAmount, succeeded := new(big.Float).SetString(amount)
 	if !succeeded {
@@ -87,6 +99,12 @@ func (U UPI) URL() string {
 	values.Set("amount", U.amount.String())
 	if U.sender != "" {
 		values.Set("sender-name", U.sender)
+	}
+	if U.instruction != "" {
+		values.Set("instruction", U.instruction)
+	}
+	if U.message != "" {
+		values.Set("message", U.message)
 	}
 	encodeValues := values.Encode()
 	u := &url.URL{
