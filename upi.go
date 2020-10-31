@@ -25,24 +25,40 @@ type UPI struct {
 	accountAlias string
 	amount       big.Float
 	receiver     string
-
-	//optional fields
+	//Optionals
 	sender      string
 	message     string
 	instruction string
 }
 
-func NewUPI(accountAlias, receiver string, amount string) (UPI, error) {
+type UPIOptional func(*UPI)
+
+func Sender(sender string) UPIOptional {
+	return func(upi *UPI) {
+		upi.sender = sender
+	}
+}
+
+func NewUPI(accountAlias, receiver string, amount string, options ...UPIOptional) (UPI, error) {
 	floatAmount, succeeded := new(big.Float).SetString(amount)
 	if !succeeded {
 		return UPI{}, errors.New("")
 	}
-	return UPI{
+	upi := UPI{
 		authority:    UnifiedPaymentInterface,
 		accountAlias: accountAlias,
 		receiver:     receiver,
 		amount:       *floatAmount,
-	}, nil
+		sender:       "",
+		message:      "",
+		instruction:  "",
+	}
+
+	for _, option := range options {
+		option(&upi)
+	}
+
+	return upi, nil
 }
 
 func (U UPI) Amount() string {
