@@ -33,9 +33,21 @@ type UPI struct {
 
 type UPIOptional func(*UPI)
 
-func Sender(sender string) UPIOptional {
+func UPISender(sender string) UPIOptional {
 	return func(upi *UPI) {
 		upi.sender = sender
+	}
+}
+
+func UPIMessage(message string) UPIOptional {
+	return func(upi *UPI) {
+		upi.message = message
+	}
+}
+
+func UPIInstruction(instruction string) UPIOptional {
+	return func(upi *UPI) {
+		upi.instruction = instruction
 	}
 }
 
@@ -87,6 +99,12 @@ func (U UPI) URL() string {
 	values.Set("amount", U.amount.String())
 	if U.sender != "" {
 		values.Set("sender-name", U.sender)
+	}
+	if U.instruction != "" {
+		values.Set("instruction", U.instruction)
+	}
+	if U.message != "" {
+		values.Set("message", U.message)
 	}
 	encodeValues := values.Encode()
 	u := &url.URL{
